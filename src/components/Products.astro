@@ -1,24 +1,26 @@
 ---
+import { cloudinaryUrl, JERSEY_IMAGES, KAOS_IMAGES, JAKET_IMAGES } from '../lib/cloudinary';
+
 const products = [
     {
         title: "Jersey Custom",
         description: "Cocok untuk tim esports, futsal, dan sepak bola.",
-        image: "https://images.unsplash.com/photo-1559563458-52c69c8e30e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600&q=80"
+        image: cloudinaryUrl(JERSEY_IMAGES[0], { width: 600, height: 600 })
     },
     {
         title: "Polo Shirt",
         description: "Elegan untuk seragam kantor dan acara semi-formal.",
-        image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600&q=80"
+        image: cloudinaryUrl(KAOS_IMAGES[0], { width: 600, height: 600 })
     },
     {
         title: "Jaket & Hoodie",
         description: "Bahan nyaman untuk komunitas dan angkatan.",
-        image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600&q=80"
+        image: cloudinaryUrl(JAKET_IMAGES[0], { width: 600, height: 600 })
     },
     {
         title: "T-Shirt Merch",
         description: "Sablon berkualitas tinggi untuk merchandise brand.",
-        image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600&q=80"
+        image: cloudinaryUrl(KAOS_IMAGES[1], { width: 600, height: 600 })
     }
 ];
 ---
@@ -32,10 +34,10 @@ const products = [
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {products.map((product) => (
-                <a href="/produk" class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group cursor-pointer block">
+                <a href="/produk" class="bg-white rounded-[2rem] overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group cursor-pointer block">
                     <!-- 1:1 Aspect Ratio Container -->
                     <div class="aspect-square bg-gray-200 overflow-hidden relative">
-                        <img src={product.image} alt={product.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <img src={product.image} alt={product.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                         <div class="print-bar absolute left-0 w-full h-2 bg-gradient-to-r from-cyan-400 via-white to-cyan-400 opacity-0 shadow-[0_0_15px_rgba(1,151,178,0.8)] z-10"></div>
                     </div>
                     <div class="p-6">
@@ -54,7 +56,7 @@ const products = [
 
         <!-- Link to Products Page -->
         <div class="text-center mt-12">
-            <a href="/produk" class="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-lg font-heading font-bold text-lg hover:bg-[#017a91] transition shadow-lg shadow-primary/20">
+            <a href="/produk" class="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-heading font-bold text-lg hover:bg-[#017a91] transition shadow-lg shadow-primary/20">
                 Lihat Semua Produk
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
