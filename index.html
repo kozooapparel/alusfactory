@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alus Factory - Solusi Konveksi & Custom Apparel</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Ganti Font ke Outfit & Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN for prototyping) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0197B2', // Alus Cyan
+                        secondary: '#1F2937', // Dark Charcoal
+                        accent: '#F3F4F6', // Light Gray
+                        surface: '#FFFFFF',
+                    },
+                    fontFamily: {
+                        heading: ['Outfit', 'sans-serif'], // Font Baru Heading
+                        body: ['Plus Jakarta Sans', 'sans-serif'], // Font Baru Body
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Icons (Lucide via UNPKG for lightweight icons) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Custom Utilities */
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .hero-overlay {
+            background: linear-gradient(rgba(31, 41, 55, 0.85), rgba(31, 41, 55, 0.7));
+        }
+
+        /* --- 3D TILT ANIMATION --- */
+        .tilt-card-container {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .tilt-card {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out; /* Smooth follow */
+        }
+
+        /* Shadow that moves with the tilt for depth */
+        .tilt-shadow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            height: 20px;
+            background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%);
+            transform: translate(-50%, 150px) rotateX(90deg) translateZ(-50px);
+            filter: blur(10px);
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+
+        .floating-element {
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease-out;
+        }
+
+        /* Glare Effect */
+        .tilt-glare {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(125deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.0) 40%, rgba(255,255,255,0.2) 45%, rgba(255,255,255,0.0) 50%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+            mix-blend-mode: overlay;
+            transform: translateZ(1px);
+        }
+
+        /* Floating Animation (Idle) */
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .idle-float {
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
+
+        /* --- Existing Animations --- */
+        @keyframes colorCycle { 0% { fill: #1F2937; } 33% { fill: #0197B2; } 66% { fill: #DC2626; } 100% { fill: #1F2937; } }
+        .animate-color-cycle { animation: colorCycle 4s infinite; }
+
+        @keyframes scanMove { 0%, 100% { transform: translateX(-20px) translateY(-20px); } 50% { transform: translateX(20px) translateY(20px); } }
+        .animate-scan { animation: scanMove 3s ease-in-out infinite; }
+
+        @keyframes popUpLoop { 0%, 10% { transform: scale(0); opacity: 0; } 20%, 80% { transform: scale(1); opacity: 1; } 90%, 100% { transform: scale(0); opacity: 0; } }
+        .animate-pop-1 { animation: popUpLoop 3s ease-in-out infinite 0s; }
+        .animate-pop-2 { animation: popUpLoop 3s ease-in-out infinite 0.2s; }
+        .animate-pop-3 { animation: popUpLoop 3s ease-in-out infinite 0.4s; }
+
+        @keyframes truckSlide { 0% { transform: translateX(-120%); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateX(120%); opacity: 0; } }
+        .animate-truck { animation: truckSlide 4s linear infinite; }
+
+        /* Screen Print Reveal (About) */
+        .reveal-holder { position: relative; display: inline-block; overflow: hidden; vertical-align: bottom; }
+        .reveal-block { position: absolute; top: 0; left: 0; width: 100%; height: 101%; background: #0197B2; transform: translateX(-101%); z-index: 10; }
+        .reveal-content { opacity: 0; }
+        .reveal-active .reveal-block { animation: blockSlide 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards; }
+        .reveal-active .reveal-content { animation: textAppear 0s 0.6s forwards; }
+        @keyframes blockSlide { 0% { transform: translateX(-101%); } 45% { transform: translateX(0); } 55% { transform: translateX(0); } 100% { transform: translateX(101%); } }
+        @keyframes textAppear { to { opacity: 1; } }
+
+        /* Printing Scan */
+        @keyframes printScan { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
+        .group:hover .print-bar { animation: printScan 1.5s linear infinite; }
+
+        /* Camera Flash */
+        @keyframes cameraFlash { 0% { background-color: white; opacity: 1; } 100% { background-color: transparent; opacity: 0; } }
+        @keyframes photoDevelop { 0% { filter: grayscale(100%) blur(5px); transform: scale(0.95); opacity: 0; } 30% { opacity: 1; } 100% { filter: grayscale(0%) blur(0px); transform: scale(1); opacity: 1; } }
+        .gallery-item { opacity: 0; }
+        .gallery-active { animation: photoDevelop 0.8s ease-out forwards; }
+        .gallery-active::after { content: ''; position: absolute; inset: 0; background-color: white; animation: cameraFlash 0.5s ease-out forwards; pointer-events: none; }
+
+        /* Pulse */
+        @keyframes pulseRing { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(2); opacity: 0; } }
+        @keyframes wiggle { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-10deg); } 75% { transform: rotate(10deg); } }
+        .cta-pulse::before { content: ''; position: absolute; left: 50%; top: 50%; width: 100%; height: 100%; background-color: rgba(255,255,255,0.4); border-radius: 9999px; transform: translate(-50%, -50%); animation: pulseRing 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; z-index: -1; }
+        .cta-icon-anim { animation: wiggle 1s ease-in-out infinite; }
+
+        /* Floating WhatsApp Button */
+        .float-wa {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 100;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .float-wa:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+        }
+    </style>
+</head>
+<body class="font-body text-secondary antialiased bg-white">
+
+    <!-- Navbar Section -->
+    <nav class="fixed w-full z-50 bg-white shadow-md transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <!-- GANTI LOGO DISINI: 
+                         1. Jika sudah di hosting/online: Ganti src="..." dengan URL logo Anda.
+                         2. Jika di komputer lokal: Simpan file logo di folder yang sama, lalu ganti src="nama-file-logo.png" 
+                    -->
+                    <img src="https://placehold.co/150x50/0197B2/white?text=LOGO+ANDA" alt="Alus Factory Logo" class="h-10 w-auto object-contain">
+                    
+                    <!-- Jika logo Anda sudah ada tulisannya, Anda bisa menghapus baris <span> dibawah ini -->
+                    <span class="font-heading font-bold text-2xl text-secondary tracking-tight">ALUS<span class="text-primary">FACTORY</span></span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#home" class="text-secondary hover:text-primary font-medium transition">Home</a>
+                    <a href="#about" class="text-secondary hover:text-primary font-medium transition">Tentang Kami</a>
+                    <a href="#products" class="text-secondary hover:text-primary font-medium transition">Produk</a>
+                    <a href="#features" class="text-secondary hover:text-primary font-medium transition">Keunggulan</a>
+                    <a href="#gallery" class="text-secondary hover:text-primary font-medium transition">Galeri</a>
+                    <!-- Updated WhatsApp Number -->
+                    <a href="https://wa.me/628112230558" target="_blank" class="bg-primary text-white px-5 py-2.5 rounded hover:bg-opacity-90 transition font-heading font-semibold shadow-lg shadow-primary/30">
+                        Hubungi Kami
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-secondary hover:text-primary focus:outline-none">
+                        <i data-lucide="menu" class="w-8 h-8"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full">
+            <div class="px-4 pt-2 pb-6 space-y-2 shadow-lg">
+                <a href="#home" class="block px-3 py-3 rounded-md text-base font-medium text-secondary hover:bg-accent hover:text-primary">Home</a>
+                <a href="#about" class="block px-3 py-3 rounded-md text-base font-medium text-secondary hover:bg-accent hover:text-primary">Tentang Kami</a>
+                <a href="#products" class="block px-3 py-3 rounded-md text-base font-medium text-secondary hover:bg-accent hover:text-primary">Produk</a>
+                <a href="#features" class="block px-3 py-3 rounded-md text-base font-medium text-secondary hover:bg-accent hover:text-primary">Keunggulan</a>
+                <a href="#gallery" class="block px-3 py-3 rounded-md text-base font-medium text-secondary hover:bg-accent hover:text-primary">Galeri</a>
+                <!-- Updated WhatsApp Number -->
+                <a href="https://wa.me/628112230558" target="_blank" class="block mt-4 text-center w-full bg-primary text-white px-5 py-3 rounded font-heading font-bold">
+                    Hubungi Kami
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 1. Hero Section -->
+    <section id="home" class="relative min-h-[700px] flex items-center bg-gray-900 overflow-hidden pt-20">
+        <!-- Background -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Konveksi Tekstil" class="w-full h-full object-cover opacity-40">
+            <div class="hero-overlay absolute inset-0"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Left Column -->
+                <div class="text-center lg:text-left animate-fade-in-up">
+                    <h1 class="font-heading font-extrabold text-4xl sm:text-5xl md:text-6xl text-white mb-6 leading-tight drop-shadow-lg">
+                        Solusi <span class="text-primary">Konveksi</span> & <br>Custom Apparel
+                    </h1>
+                    <p class="text-lg sm:text-xl text-gray-200 mb-8 max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed">
+                        Wujudkan identitas tim dan brand Anda dengan kualitas produksi terbaik. Melayani pembuatan jersey, jaket, dan seragam dengan desain 100% custom.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <!-- Updated WhatsApp Number -->
+                        <a href="https://wa.me/628112230558" target="_blank" class="bg-primary text-white px-8 py-4 rounded font-heading font-bold text-lg hover:bg-[#017a91] transition shadow-xl shadow-primary/20 flex items-center justify-center gap-2">
+                            <i data-lucide="message-circle" class="w-5 h-5"></i>
+                            Konsultasi Gratis
+                        </a>
+                        <a href="#products" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded font-heading font-bold text-lg hover:bg-white hover:text-secondary transition flex items-center justify-center">
+                            Lihat Katalog
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Column: 3D Interactive Jersey -->
+                <div class="hidden lg:flex justify-center items-center perspective-1000">
+                    <div class="tilt-card-container w-[500px] h-[600px] flex items-center justify-center relative cursor-pointer" id="tilt-zone">
+                        
+                        <!-- Background Glow (Static) -->
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-full blur-3xl animate-pulse -z-10"></div>
+
+                        <!-- 3D Card Wrapper -->
+                        <div class="tilt-card w-full h-full flex items-center justify-center idle-float" id="tilt-card">
+                            
+                            <!-- 1. Shadow (Base Layer) -->
+                            <div class="tilt-shadow"></div>
+
+                            <!-- 2. Main Jersey Image (Middle Layer) -->
+                            <!-- UPDATED IMAGE SOURCE: Reliable PNG Mockup -->
+                            <div class="relative z-10 transform transition-transform duration-200" style="transform: translateZ(20px);">
+                                <img src="https://www.pngall.com/wp-content/uploads/5/Blue-T-Shirt-PNG-Clipart.png" 
+                                     alt="3D Jersey Mockup" 
+                                     class="w-[480px] drop-shadow-2xl object-contain filter brightness-110 contrast-110">
+                                
+                                <!-- Glare Overlay -->
+                                <div class="tilt-glare absolute inset-0 rounded-full opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
+                            </div>
+
+                            <!-- 3. Floating Badges (Top Layer - Pop out more) -->
+                            <div class="floating-element absolute top-40 right-10 bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-xl flex items-center gap-3 z-30" style="transform: translateZ(60px);">
+                                <div class="w-6 h-6 rounded-full bg-[#0197B2] border border-gray-200 shadow-inner"></div>
+                                <div>
+                                    <span class="block text-xs font-bold text-secondary uppercase tracking-wider">Base Color</span>
+                                    <span class="block text-[10px] text-gray-500">Alus Cyan</span>
+                                </div>
+                            </div>
+
+                            <div class="floating-element absolute bottom-40 left-0 bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-xl flex items-center gap-3 z-30" style="transform: translateZ(80px);">
+                                <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-primary shadow-sm">
+                                    <i data-lucide="scissors" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-bold text-secondary uppercase tracking-wider">Premium Fit</span>
+                                    <span class="block text-[10px] text-gray-500">Raglan Cut</span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. About Section (Screen Print Reveal) -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <!-- Image Grid -->
+                <div class="grid grid-cols-2 gap-4">
+                    <img src="https://images.unsplash.com/photo-1574634534894-89d7576c8259?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Proses Produksi" class="rounded-lg shadow-lg w-full h-64 object-cover transform translate-y-8">
+                    <img src="https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Detail Bahan" class="rounded-lg shadow-lg w-full h-64 object-cover">
+                </div>
+                
+                <!-- Content with Screen Print Animation -->
+                <div id="about-content">
+                    <h4 class="text-primary font-heading font-bold tracking-wider uppercase mb-2">Tentang Alus Factory</h4>
+                    
+                    <div class="mb-6">
+                        <!-- Screen Print Reveal Effect -->
+                        <h2 class="text-3xl md:text-4xl font-heading font-bold text-secondary leading-tight reveal-holder">
+                            <span class="reveal-content">Mitra Produksi Apparel</span>
+                            <div class="reveal-block"></div>
+                        </h2>
+                        <h2 class="text-3xl md:text-4xl font-heading font-bold text-secondary leading-tight reveal-holder">
+                            <span class="reveal-content">Profesional Anda</span>
+                            <div class="reveal-block" style="background-color: #1F2937;"></div>
+                        </h2>
+                    </div>
+
+                    <p class="text-gray-600 mb-6 leading-relaxed mt-2">
+                        Alus Factory hadir sebagai solusi manufaktur pakaian yang mengutamakan ketepatan waktu dan kualitas detail. Berpengalaman menangani ribuan pesanan dari komunitas kecil hingga korporat besar.
+                    </p>
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                        Fasilitas produksi kami dilengkapi dengan teknologi printing sublimasi terkini dan tenaga jahit ahli, memastikan setiap potong pakaian mencerminkan standar tinggi brand Anda.
+                    </p>
+                    
+                    <div class="flex items-center gap-8" id="stats-container">
+                        <div>
+                            <span class="block text-3xl font-heading font-bold text-primary stat-number" data-target="500">0</span>
+                            <span class="text-sm text-gray-500">Klien Puas</span>
+                        </div>
+                        <div>
+                            <span class="block text-3xl font-heading font-bold text-primary stat-number" data-target="100">0</span>
+                            <span class="text-sm text-gray-500">Jaminan Kualitas (%)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Services / Products -->
+    <section id="products" class="py-20 bg-accent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-heading font-bold text-secondary mb-4">Layanan & Produk Kami</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Kami menyediakan berbagai jenis apparel yang dapat dikustomisasi sepenuhnya sesuai kebutuhan Anda.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 group cursor-pointer">
+                    <div class="h-48 bg-gray-200 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1559563458-52c69c8e30e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Jersey Custom" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="print-bar absolute left-0 w-full h-2 bg-gradient-to-r from-cyan-400 via-white to-cyan-400 opacity-0 shadow-[0_0_15px_rgba(1,151,178,0.8)] z-10"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-heading font-bold text-xl mb-2 text-secondary">Jersey Custom</h3>
+                        <p class="text-sm text-gray-500 mb-4">Cocok untuk tim esports, futsal, dan sepak bola.</p>
+                        <span class="text-primary font-semibold text-sm flex items-center group-hover:underline">Lihat Detail <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></span>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 group cursor-pointer">
+                    <div class="h-48 bg-gray-200 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Polo Shirt" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                         <div class="print-bar absolute left-0 w-full h-2 bg-gradient-to-r from-cyan-400 via-white to-cyan-400 opacity-0 shadow-[0_0_15px_rgba(1,151,178,0.8)] z-10"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-heading font-bold text-xl mb-2 text-secondary">Polo Shirt</h3>
+                        <p class="text-sm text-gray-500 mb-4">Elegan untuk seragam kantor dan acara semi-formal.</p>
+                        <span class="text-primary font-semibold text-sm flex items-center group-hover:underline">Lihat Detail <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></span>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 group cursor-pointer">
+                    <div class="h-48 bg-gray-200 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Jaket & Hoodie" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                         <div class="print-bar absolute left-0 w-full h-2 bg-gradient-to-r from-cyan-400 via-white to-cyan-400 opacity-0 shadow-[0_0_15px_rgba(1,151,178,0.8)] z-10"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-heading font-bold text-xl mb-2 text-secondary">Jaket & Hoodie</h3>
+                        <p class="text-sm text-gray-500 mb-4">Bahan nyaman untuk komunitas dan angkatan.</p>
+                        <span class="text-primary font-semibold text-sm flex items-center group-hover:underline">Lihat Detail <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></span>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 group cursor-pointer">
+                    <div class="h-48 bg-gray-200 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="T-Shirt" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                         <div class="print-bar absolute left-0 w-full h-2 bg-gradient-to-r from-cyan-400 via-white to-cyan-400 opacity-0 shadow-[0_0_15px_rgba(1,151,178,0.8)] z-10"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-heading font-bold text-xl mb-2 text-secondary">T-Shirt Merch</h3>
+                        <p class="text-sm text-gray-500 mb-4">Sablon berkualitas tinggi untuk merchandise brand.</p>
+                        <span class="text-primary font-semibold text-sm flex items-center group-hover:underline">Lihat Detail <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. USP Section (Bento Grid) -->
+    <section id="features" class="py-24 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h4 class="text-primary font-heading font-bold tracking-wider uppercase mb-2">Kenapa Memilih Kami?</h4>
+                <h2 class="text-3xl md:text-4xl font-heading font-bold text-secondary">Keunggulan Alus Factory</h2>
+            </div>
+
+            <!-- Bento Grid Layout -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[minmax(280px,auto)]">
+                <!-- Item 1: 100% Custom -->
+                <div class="group relative md:col-span-2 bg-accent rounded-3xl p-8 overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col justify-between">
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center mb-4 shadow-sm text-primary">
+                            <i data-lucide="palette" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-2xl text-secondary mb-2">100% Custom Design</h3>
+                        <p class="text-gray-600 max-w-sm">Kebebasan penuh dalam menentukan desain. Anda bisa memilih warna, pola, hingga ukuran spesifik untuk identitas brand Anda.</p>
+                    </div>
+                    <div class="absolute right-0 bottom-0 w-1/2 h-full opacity-30 md:opacity-100 md:w-64 md:h-64 md:right-8 md:bottom-8 pointer-events-none">
+                        <svg viewBox="0 0 24 24" class="w-full h-full drop-shadow-md" stroke="currentColor" stroke-width="0.5">
+                            <path class="animate-color-cycle" d="M20.38 3.46L16 2l-4 6-4-6-4.38 1.46a2 2 0 0 0-1.15 1.25L2 19h5l1-5h8l1 5h5l.53-14.29a2 2 0 0 0-1.15-1.25z" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <!-- Item 2: Quality Control -->
+                <div class="group relative bg-white border border-gray-100 rounded-3xl p-8 overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col justify-between">
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mb-4 shadow-sm text-primary">
+                            <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-2xl text-secondary mb-2">Quality Control</h3>
+                        <p class="text-gray-600 text-sm">Pengecekan berlapis untuk hasil yang sempurna.</p>
+                    </div>
+                    <div class="absolute bottom-[-20px] right-[-20px] w-40 h-40 opacity-20 group-hover:opacity-40 transition-opacity">
+                         <div class="w-full h-full flex items-center justify-center animate-scan text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <!-- Item 3: Versatile -->
+                <div class="group relative bg-white border border-gray-100 rounded-3xl p-8 overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col justify-between">
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mb-4 shadow-sm text-primary">
+                            <i data-lucide="users" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-2xl text-secondary mb-2">Versatile</h3>
+                        <p class="text-gray-600 text-sm">Untuk korporat, sekolah, dan klub olahraga.</p>
+                    </div>
+                     <div class="absolute bottom-8 right-4 flex gap-2 opacity-50">
+                        <svg class="w-10 h-10 text-primary animate-pop-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                        <svg class="w-10 h-10 text-secondary animate-pop-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+                        <svg class="w-10 h-10 text-primary animate-pop-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                    </div>
+                </div>
+                <!-- Item 4: On-Time -->
+                <div class="group relative md:col-span-2 bg-primary rounded-3xl p-8 overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col justify-between text-white">
+                    <div class="relative z-10 max-w-lg">
+                        <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 shadow-sm text-white">
+                            <i data-lucide="clock" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-2xl mb-2">Jaminan Tepat Waktu</h3>
+                        <p class="text-white/90">Kami memahami deadline Anda adalah prioritas. Dengan sistem manajemen produksi yang efisien, kami menjamin pesanan Anda selesai sesuai jadwal yang disepakati.</p>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full h-24 overflow-hidden pointer-events-none">
+                        <div class="absolute bottom-4 w-full h-1 bg-white/30"></div>
+                        <div class="absolute bottom-4 left-0 animate-truck text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Gallery Section -->
+    <section id="gallery" class="py-20 bg-accent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-heading font-bold text-secondary mb-10 text-center">Galeri Produksi</h2>
+            
+            <div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6" id="gallery-grid">
+                <div class="gallery-item break-inside-avoid rounded-lg overflow-hidden shadow-md">
+                    <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Gallery 1" class="w-full hover:scale-105 transition duration-500">
+                </div>
+                <div class="gallery-item break-inside-avoid rounded-lg overflow-hidden shadow-md" style="animation-delay: 0.2s">
+                    <img src="https://images.unsplash.com/photo-1562157873-818bc0726f68?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Gallery 2" class="w-full hover:scale-105 transition duration-500">
+                </div>
+                <div class="gallery-item break-inside-avoid rounded-lg overflow-hidden shadow-md" style="animation-delay: 0.4s">
+                    <img src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Gallery 3" class="w-full hover:scale-105 transition duration-500">
+                </div>
+                <div class="gallery-item break-inside-avoid rounded-lg overflow-hidden shadow-md" style="animation-delay: 0.6s">
+                    <img src="https://images.unsplash.com/photo-1544441893-675973e31985?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Gallery 4" class="w-full hover:scale-105 transition duration-500">
+                </div>
+                <div class="gallery-item break-inside-avoid rounded-lg overflow-hidden shadow-md" style="animation-delay: 0.8s">
+                    <img src="https://images.unsplash.com/photo-1556906781-9a412961c28c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Gallery 5" class="w-full hover:scale-105 transition duration-500">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. CTA Section -->
+    <section class="py-20 bg-primary">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-heading font-bold text-white mb-6">Siap Membuat Apparel Custom Anda?</h2>
+            <p class="text-white/90 text-lg mb-8 max-w-2xl mx-auto">Konsultasikan kebutuhan desain dan anggaran Anda bersama tim kami. Dapatkan penawaran terbaik hari ini.</p>
+            <!-- Updated WhatsApp Number -->
+            <a href="https://wa.me/628112230558" target="_blank" class="cta-pulse relative inline-flex items-center gap-3 bg-white text-primary px-10 py-4 rounded-full font-heading font-bold text-lg hover:bg-gray-100 transition shadow-2xl overflow-hidden group">
+                <i data-lucide="message-square" class="w-6 h-6 cta-icon-anim"></i>
+                <span>Hubungi Kami Sekarang</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- 7. Footer -->
+    <footer class="bg-secondary text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-1">
+                    <!-- Footer Logo -->
+                    <div class="flex items-center gap-2 mb-4">
+                        <!-- GANTI LOGO FOOTER DISINI -->
+                        <img src="https://placehold.co/150x50/ffffff/0197B2?text=LOGO+ANDA" alt="Alus Factory Logo" class="h-8 w-auto object-contain">
+                        <span class="font-heading font-bold text-2xl">ALUS<span class="text-primary">FACTORY</span></span>
+                    </div>
+                    
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">Solusi manufaktur apparel terpercaya untuk segala kebutuhan branding dan komunitas Anda.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-primary transition"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-heading font-bold text-lg mb-4">Menu</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="#home" class="hover:text-primary transition">Home</a></li>
+                        <li><a href="#about" class="hover:text-primary transition">Tentang Kami</a></li>
+                        <li><a href="#products" class="hover:text-primary transition">Produk</a></li>
+                        <li><a href="#gallery" class="hover:text-primary transition">Galeri</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-heading font-bold text-lg mb-4">Kontak</h4>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li class="flex items-start gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-primary flex-shrink-0"></i><span>Jl. Industri No. 123, Bandung, Jawa Barat, Indonesia</span></li>
+                        <!-- Updated WhatsApp Number Display -->
+                        <li class="flex items-center gap-3"><i data-lucide="phone" class="w-5 h-5 text-primary flex-shrink-0"></i><span>+62 811-2230-558</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="mail" class="w-5 h-5 text-primary flex-shrink-0"></i><span>hello@alusfactory.com</span></li>
+                    </ul>
+                </div>
+                 <div>
+                    <h4 class="font-heading font-bold text-lg mb-4">Jam Operasional</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li class="flex justify-between"><span>Senin - Jumat</span> <span>08:00 - 17:00</span></li>
+                        <li class="flex justify-between"><span>Sabtu</span> <span>09:00 - 14:00</span></li>
+                        <li class="flex justify-between"><span>Minggu</span> <span class="text-red-400">Tutup</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8 text-center">
+                <p class="text-gray-500 text-sm">&copy; 2024 Alus Factory. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/628112230558" target="_blank" class="float-wa" title="Chat di WhatsApp">
+        <!-- WhatsApp SVG Icon -->
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="white">
+            <path d="M12.04 2C6.48 2 2 6.48 2 12.04C2 13.82 2.47 15.52 3.33 17L2.07 22L7.22 20.65C8.64 21.43 10.31 21.89 12.04 21.89C17.6 21.89 22.08 17.41 22.08 11.85C22.08 6.4 17.6 2 12.04 2ZM12.04 20.21C10.53 20.21 9.09 19.8 7.82 19.06L7.52 18.88L4.47 19.68L5.29 16.7L5.1 16.39C4.26 15.06 3.79 13.52 3.79 11.85C3.79 7.39 7.4 3.78 12.04 3.78C16.68 3.78 20.3 7.39 20.3 11.85C20.3 16.31 16.68 20.21 12.04 20.21ZM16.63 14.54C16.38 14.41 15.15 13.8 14.92 13.72C14.69 13.63 14.52 13.59 14.36 13.84C14.19 14.09 13.71 14.65 13.56 14.82C13.41 14.99 13.27 15.01 13.02 14.88C12.77 14.76 11.96 14.49 11 13.64C10.26 12.98 9.76 12.16 9.51 11.73C9.26 11.3 9.48 11.07 9.61 10.95C9.72 10.84 9.86 10.66 9.99 10.51C10.11 10.36 10.16 10.26 10.24 10.09C10.32 9.92 10.28 9.77 10.22 9.65C10.16 9.52 9.68 8.35 9.48 7.87C9.28 7.39 9.08 7.46 8.93 7.46C8.79 7.46 8.63 7.46 8.47 7.46C8.3 7.46 8.03 7.52 7.8 7.77C7.57 8.02 6.93 8.62 6.93 9.85C6.93 11.08 7.82 12.27 7.95 12.44C8.08 12.61 9.72 15.15 12.22 16.23C12.82 16.49 13.29 16.64 13.66 16.76C14.24 16.94 14.77 16.92 15.19 16.86C15.66 16.79 16.63 16.27 16.83 15.7C17.03 15.13 17.03 14.64 16.97 14.54C16.91 14.44 16.76 14.39 16.63 14.54Z"/>
+        </svg>
+    </a>
+
+    <!-- Scripts -->
+    <script>
+        lucide.createIcons();
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) navbar.classList.add('shadow-md', 'bg-white/95', 'backdrop-blur-sm');
+            else navbar.classList.remove('backdrop-blur-sm');
+        });
+
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        document.querySelectorAll('#mobile-menu a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+        // --- 3D TILT LOGIC ---
+        const tiltZone = document.getElementById('tilt-zone');
+        const tiltCard = document.getElementById('tilt-card');
+        
+        if (tiltZone && tiltCard) {
+            tiltZone.addEventListener('mousemove', (e) => {
+                const rect = tiltZone.getBoundingClientRect();
+                const x = e.clientX - rect.left; // x position within the element
+                const y = e.clientY - rect.top;  // y position within the element
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -15; // Max 15deg tilt
+                const rotateY = ((x - centerX) / centerX) * 15;
+
+                // Adjust shadow position based on tilt
+                const shadowX = (x - centerX) / 10;
+                const shadowY = 150 + ((y - centerY) / 5);
+
+                tiltCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                
+                // Optional: Move floating badges slightly more (parallax)
+                document.querySelectorAll('.floating-element').forEach((el, index) => {
+                     const factor = index === 0 ? 1.5 : 1.2;
+                     el.style.transform = `translateZ(${60 + index*20}px) translateX(${(x - centerX) / (20/factor)}px) translateY(${(y - centerY) / (20/factor)}px)`;
+                });
+            });
+
+            tiltZone.addEventListener('mouseleave', () => {
+                tiltCard.style.transform = `rotateX(0) rotateY(0)`; // Reset
+            });
+        }
+
+        // --- SCROLL ANIMATIONS ---
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.3 };
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                let val = Math.floor(progress * (end - start) + start);
+                if (end === 500) obj.innerHTML = val + "+";
+                else if (end === 100) obj.innerHTML = val + "%";
+                else obj.innerHTML = val;
+                if (progress < 1) window.requestAnimationFrame(step);
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.id === 'about-content') {
+                        const reveals = entry.target.querySelectorAll('.reveal-holder');
+                        reveals.forEach((el, index) => setTimeout(() => el.classList.add('reveal-active'), index * 200));
+                        const stats = entry.target.querySelectorAll('.stat-number');
+                        stats.forEach(stat => animateValue(stat, 0, parseInt(stat.getAttribute('data-target')), 2000));
+                    }
+                    if (entry.target.classList.contains('gallery-item')) entry.target.classList.add('gallery-active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        const aboutContent = document.getElementById('about-content');
+        if(aboutContent) observer.observe(aboutContent);
+        document.querySelectorAll('.gallery-item').forEach(item => observer.observe(item));
+    </script>
+</body>
+</html>
