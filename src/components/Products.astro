@@ -1,0 +1,51 @@
+---
+const products = [
+    {
+        title: "Jersey Custom",
+        description: "Cocok untuk tim esports, futsal, dan sepak bola.",
+        image: "https://images.unsplash.com/photo-1559563458-52c69c8e30e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        title: "Polo Shirt",
+        description: "Elegan untuk seragam kantor dan acara semi-formal.",
+        image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        title: "Jaket & Hoodie",
+        description: "Bahan nyaman untuk komunitas dan angkatan.",
+        image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        title: "T-Shirt Merch",
+        description: "Sablon berkualitas tinggi untuk merchandise brand.",
+        image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+    }
+];
+---
+
+<section id="products" class="py-20 bg-accent">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-heading font-bold text-secondary mb-4">Layanan & Produk Kami</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Kami menyediakan berbagai jenis apparel yang dapat dikustomisasi sepenuhnya sesuai kebutuhan Anda.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {products.map((product) => (
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 group cursor-pointer">
+                    <div class="h-48 bg-gray-200 overflow-hidden relative">
+                        <img src={product.image} alt={product.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="print-bar absolute left-0 w-full h-2 bg-gradient-to-r from-cyan-400 via-white to-cyan-400 opacity-0 shadow-[0_0_15px_rgba(1,151,178,0.8)] z-10"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-heading font-bold text-xl mb-2 text-secondary">{product.title}</h3>
+                        <p class="text-sm text-gray-500 mb-4">{product.description}</p>
+                        <span class="text-primary font-semibold text-sm flex items-center group-hover:underline">
+                            Lihat Detail <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                        </span>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>

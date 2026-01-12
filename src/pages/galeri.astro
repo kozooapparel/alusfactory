@@ -1,0 +1,117 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import PageHeader from '../components/PageHeader.astro';
+import GalleryGrid from '../components/GalleryGrid.astro';
+import Footer from '../components/Footer.astro';
+import FloatingWhatsApp from '../components/FloatingWhatsApp.astro';
+
+const whatsappUrl = "https://wa.me/628112230558?text=Halo,%20saya%20ingin%20mengirimkan%20desain%20saya";
+
+const galleryImages = [
+    {
+        src: "https://images.unsplash.com/photo-1517466787929-bc90951d0974?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        alt: "Jersey Tim Futsal",
+        caption: "Jersey Home & Away Tim Futsal Garuda FC - Full Printing Sublimation.",
+        category: "Tim Olahraga"
+    },
+    {
+        src: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        alt: "Polo Shirt Korporat",
+        caption: "Polo Shirt Gathering PT. Maju Bersama - Lacoste CVC dengan Bordir Komputer.",
+        category: "Perusahaan/Korporat"
+    },
+    {
+        src: "https://images.unsplash.com/photo-1562157873-818bc0726f68?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        alt: "Jersey Basket Komunitas",
+        caption: "Jersey Basket Komunitas - Pola V-Neck Custom dengan nama punggung.",
+        category: "Komunitas"
+    },
+    {
+        src: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        alt: "Jaket Windbreaker Event",
+        caption: "Jaket Coach Windbreaker untuk Merchandise Event Musik.",
+        category: "Event"
+    },
+    {
+        src: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        alt: "Kaos Komunitas",
+        caption: "Kaos Event Komunitas Motor - Cotton Combed 30s Reactive.",
+        category: "Komunitas"
+    },
+    {
+        src: "https://images.unsplash.com/photo-1544441893-675973e31985?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        alt: "Seragam Kantor",
+        caption: "Seragam Kemeja Staff PT. Teknologi Maju - Oxford Premium.",
+        category: "Perusahaan/Korporat"
+    },
+    {
+        src: "https://images.unsplash.com/photo-1556906781-9a412961c28c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        alt: "Jersey Sepakbola",
+        caption: "Jersey Full Kit Tim Sepakbola Putra Jaya FC - Drifit Premium.",
+        category: "Tim Olahraga"
+    },
+    {
+        src: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        alt: "T-Shirt Event",
+        caption: "T-Shirt Official Festival Musik Nusantara 2024.",
+        category: "Event"
+    },
+    {
+        src: "https://images.unsplash.com/photo-1559563458-52c69c8e30e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        alt: "Jersey Esports",
+        caption: "Jersey Tim Esports - Full Sublimation dengan sponsor.",
+        category: "Tim Olahraga"
+    }
+];
+
+const categories = ["Semua", "Tim Olahraga", "Perusahaan/Korporat", "Komunitas", "Event"];
+---
+
+<Layout title="Galeri - Alus Factory" description="Portofolio hasil produksi Alus Factory. Bukti nyata kualitas kami untuk berbagai klien dari berbagai sektor.">
+    <Navbar />
+    
+    <PageHeader 
+        title="Portofolio Hasil Produksi" 
+        subtitle="Bukti nyata kualitas Alus Factory"
+        backgroundImage="https://images.unsplash.com/photo-1574634534894-89d7576c8259?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+    />
+    
+    <!-- Description -->
+    <section class="pt-12 pb-8 bg-accent">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-lg text-gray-600">
+                Berikut adalah beberapa proyek yang telah kami selesaikan untuk klien dari berbagai sektor.
+                <strong class="text-secondary">Klik gambar</strong> untuk melihat detail.
+            </p>
+        </div>
+    </section>
+    
+    <!-- Gallery -->
+    <section class="py-12 bg-accent">
+        <GalleryGrid images={galleryImages} categories={categories} />
+    </section>
+    
+    <!-- CTA -->
+    <section class="py-20 bg-primary">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-2xl md:text-3xl font-heading font-bold text-white mb-4">
+                Suka dengan Hasil Kerja Kami?
+            </h2>
+            <p class="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
+                Mari diskusikan desain Anda dan jadikan ide Anda menjadi nyata bersama Alus Factory.
+            </p>
+            <a 
+                href={whatsappUrl}
+                target="_blank"
+                class="cta-pulse relative inline-flex items-center gap-3 bg-white text-primary px-10 py-4 rounded-full font-heading font-bold text-lg hover:bg-gray-100 transition shadow-2xl overflow-hidden"
+            >
+                <i data-lucide="upload" class="w-6 h-6"></i>
+                <span>Kirim Desain Saya</span>
+            </a>
+        </div>
+    </section>
+    
+    <Footer />
+    <FloatingWhatsApp />
+</Layout>

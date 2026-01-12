@@ -1,0 +1,158 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ProductFilter from '../components/ProductFilter.astro';
+import ProductCard from '../components/ProductCard.astro';
+import CTA from '../components/CTA.astro';
+import Footer from '../components/Footer.astro';
+import FloatingWhatsApp from '../components/FloatingWhatsApp.astro';
+
+const categories = ["Semua", "Jersey", "Casual", "Jaket"];
+
+const products = [
+    {
+        title: "Jersey Custom (Performance)",
+        description: "Cocok untuk futsal, sepakbola, dan e-sport. Desain full custom sesuai identitas tim Anda.",
+        image: "https://images.unsplash.com/photo-1559563458-52c69c8e30e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        category: "Jersey",
+        specs: [
+            "Bahan Drifit Milano/Benzema",
+            "Full Printing Sublimation",
+            "Anti-UV & Quick Dry"
+        ],
+        badge: "Best Seller"
+    },
+    {
+        title: "Jersey Basket",
+        description: "Pola potong longgar standar NBA/IBL untuk pergerakan maksimal di lapangan.",
+        image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        category: "Jersey",
+        specs: [
+            "Bahan Mesh Breathable",
+            "Leher V-Neck/Round",
+            "Aplikasi Bordir atau Printing"
+        ]
+    },
+    {
+        title: "Baju Baseball",
+        description: "Gaya klasik sportwear Amerika yang timeless dan nyaman digunakan sehari-hari.",
+        image: "https://images.unsplash.com/photo-1556906781-9a412961c28c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        category: "Casual",
+        specs: [
+            "Bahan Paragon/Soft Dry",
+            "Kancing depan (Button up)",
+            "Potongan Relaxed Fit"
+        ]
+    },
+    {
+        title: "Polo T-Shirt",
+        description: "Elegan untuk seragam kantor atau event semi-formal dengan kesan profesional.",
+        image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        category: "Casual",
+        specs: [
+            "Bahan Lacoste Cotton/CVC",
+            "Kerah kokoh",
+            "Opsi Bordir Komputer presisi"
+        ],
+        badge: "Popular"
+    },
+    {
+        title: "T-Shirt / Kaos",
+        description: "Merchandise event, kaos komunitas, atau clothing brand dengan berbagai teknik sablon.",
+        image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        category: "Casual",
+        specs: [
+            "Cotton Combed 24s/30s (Reactive)",
+            "Sablon Plastisol/DTF/Discharge",
+            "Ukuran S - 4XL"
+        ]
+    },
+    {
+        title: "Jaket Printing / Hoodie",
+        description: "Outerwear premium untuk identitas komunitas dengan berbagai pilihan bahan.",
+        image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        category: "Jaket",
+        specs: [
+            "Bahan Lotto/Fleece/Taslan",
+            "Full Print atau kombinasi",
+            "Resleting YKK"
+        ],
+        badge: "New"
+    }
+];
+
+const whatsappCustomUrl = "https://wa.me/628112230558?text=Halo,%20saya%20ingin%20konsultasi%20custom%20request";
+---
+
+<Layout title="Produk - Alus Factory" description="Katalog layanan dan produk custom Alus Factory. Jersey, Polo Shirt, Kaos, Jaket, dan berbagai apparel custom lainnya.">
+    <Navbar />
+    
+    <PageHeader 
+        title="Katalog Produk" 
+        subtitle="Layanan & Produk Custom"
+        backgroundImage="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+    />
+    
+    <!-- Description -->
+    <section class="py-12 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-lg text-gray-600">
+                Pilih kategori produk yang Anda butuhkan. Semua item di bawah ini dapat dikustomisasi sepenuhnya <strong class="text-primary">(Full Custom)</strong> mulai dari bahan, warna, logo, hingga ukuran.
+            </p>
+        </div>
+    </section>
+    
+    <ProductFilter categories={categories} />
+    
+    <!-- Products Grid -->
+    <section class="py-8 bg-accent min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="products-grid">
+                {products.map((product) => (
+                    <ProductCard 
+                        title={product.title}
+                        description={product.description}
+                        image={product.image}
+                        category={product.category}
+                        specs={product.specs}
+                        badge={product.badge}
+                    />
+                ))}
+            </div>
+        </div>
+    </section>
+    
+    <!-- Custom Request CTA -->
+    <section class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="bg-gradient-to-br from-secondary to-gray-800 rounded-3xl p-10 md:p-16 text-white relative overflow-hidden">
+                <!-- Decorative -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 w-48 h-48 bg-primary/10 rounded-full blur-3xl"></div>
+                
+                <div class="relative z-10">
+                    <i data-lucide="sparkles" class="w-12 h-12 text-primary mx-auto mb-6"></i>
+                    <h2 class="text-2xl md:text-3xl font-heading font-bold mb-4">
+                        Tidak Menemukan yang Anda Cari?
+                    </h2>
+                    <p class="text-gray-300 mb-8 max-w-xl mx-auto">
+                        Kami bisa buatkan custom request sesuai kebutuhan spesifik Anda. Konsultasikan ide Anda dengan tim kami.
+                    </p>
+                    <a 
+                        href={whatsappCustomUrl}
+                        target="_blank"
+                        class="inline-flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-full font-heading font-bold text-lg hover:bg-[#017a91] transition shadow-xl"
+                    >
+                        <i data-lucide="message-circle" class="w-5 h-5"></i>
+                        Konsultasi Custom
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <CTA />
+    <Footer />
+    <FloatingWhatsApp />
+</Layout>

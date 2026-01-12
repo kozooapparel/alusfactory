@@ -1,0 +1,379 @@
+@import "tailwindcss";
+
+/* Custom Theme Configuration */
+@theme {
+    --color-primary: #0197B2;
+    --color-secondary: #1F2937;
+    --color-accent: #F3F4F6;
+    --color-surface: #FFFFFF;
+
+    /* Unique Racing/Tech Sport Fonts */
+    --font-heading: 'Rajdhani', sans-serif;
+    --font-body: 'Saira', sans-serif;
+}
+
+/* Custom Utilities */
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-overlay {
+    background: linear-gradient(rgba(31, 41, 55, 0.85), rgba(31, 41, 55, 0.7));
+}
+
+/* --- 3D TILT ANIMATION --- */
+.tilt-card-container {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+}
+
+.tilt-card {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.1s ease-out;
+}
+
+/* Shadow that moves with the tilt for depth */
+.tilt-shadow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: 20px;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 70%);
+    transform: translate(-50%, 150px) rotateX(90deg) translateZ(-50px);
+    filter: blur(10px);
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
+.floating-element {
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease-out;
+}
+
+/* Glare Effect */
+.tilt-glare {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(125deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.0) 40%, rgba(255, 255, 255, 0.2) 45%, rgba(255, 255, 255, 0.0) 50%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    transform: translateZ(1px);
+}
+
+/* Floating Animation (Idle) */
+@keyframes gentleFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+.idle-float {
+    animation: gentleFloat 4s ease-in-out infinite;
+}
+
+/* --- Existing Animations --- */
+@keyframes colorCycle {
+    0% {
+        fill: #1F2937;
+    }
+
+    33% {
+        fill: #0197B2;
+    }
+
+    66% {
+        fill: #DC2626;
+    }
+
+    100% {
+        fill: #1F2937;
+    }
+}
+
+.animate-color-cycle {
+    animation: colorCycle 4s infinite;
+}
+
+@keyframes scanMove {
+
+    0%,
+    100% {
+        transform: translateX(-20px) translateY(-20px);
+    }
+
+    50% {
+        transform: translateX(20px) translateY(20px);
+    }
+}
+
+.animate-scan {
+    animation: scanMove 3s ease-in-out infinite;
+}
+
+@keyframes popUpLoop {
+
+    0%,
+    10% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    20%,
+    80% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    90%,
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+
+.animate-pop-1 {
+    animation: popUpLoop 3s ease-in-out infinite 0s;
+}
+
+.animate-pop-2 {
+    animation: popUpLoop 3s ease-in-out infinite 0.2s;
+}
+
+.animate-pop-3 {
+    animation: popUpLoop 3s ease-in-out infinite 0.4s;
+}
+
+@keyframes truckSlide {
+    0% {
+        transform: translateX(-120%);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+}
+
+.animate-truck {
+    animation: truckSlide 4s linear infinite;
+}
+
+/* Screen Print Reveal (About) */
+.reveal-holder {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+}
+
+.reveal-block {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 101%;
+    background: #0197B2;
+    transform: translateX(-101%);
+    z-index: 10;
+}
+
+.reveal-content {
+    opacity: 0;
+}
+
+.reveal-active .reveal-block {
+    animation: blockSlide 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+.reveal-active .reveal-content {
+    animation: textAppear 0s 0.6s forwards;
+}
+
+@keyframes blockSlide {
+    0% {
+        transform: translateX(-101%);
+    }
+
+    45% {
+        transform: translateX(0);
+    }
+
+    55% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(101%);
+    }
+}
+
+@keyframes textAppear {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Printing Scan */
+@keyframes printScan {
+    0% {
+        top: -10%;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        top: 110%;
+        opacity: 0;
+    }
+}
+
+.group:hover .print-bar {
+    animation: printScan 1.5s linear infinite;
+}
+
+/* Camera Flash */
+@keyframes cameraFlash {
+    0% {
+        background-color: white;
+        opacity: 1;
+    }
+
+    100% {
+        background-color: transparent;
+        opacity: 0;
+    }
+}
+
+@keyframes photoDevelop {
+    0% {
+        filter: grayscale(100%) blur(5px);
+        transform: scale(0.95);
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        filter: grayscale(0%) blur(0px);
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.gallery-item {
+    opacity: 0;
+}
+
+.gallery-active {
+    animation: photoDevelop 0.8s ease-out forwards;
+}
+
+.gallery-active::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: white;
+    animation: cameraFlash 0.5s ease-out forwards;
+    pointer-events: none;
+}
+
+/* Pulse */
+@keyframes pulseRing {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+@keyframes wiggle {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(-10deg);
+    }
+
+    75% {
+        transform: rotate(10deg);
+    }
+}
+
+.cta-pulse::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 9999px;
+    transform: translate(-50%, -50%);
+    animation: pulseRing 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    z-index: -1;
+}
+
+.cta-icon-anim {
+    animation: wiggle 1s ease-in-out infinite;
+}
+
+/* Floating WhatsApp Button */
+.float-wa {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #25D366;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    z-index: 100;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.float-wa:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+}

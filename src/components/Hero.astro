@@ -1,0 +1,113 @@
+---
+const whatsappUrl = "https://wa.me/628112230558";
+---
+
+<section id="home" class="relative min-h-[700px] flex items-center bg-gray-900 overflow-hidden pt-20">
+    <!-- Background -->
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Konveksi Tekstil" class="w-full h-full object-cover opacity-40">
+        <div class="hero-overlay absolute inset-0"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            <!-- Left Column -->
+            <div class="text-center lg:text-left animate-fade-in-up">
+                <h1 class="font-heading font-extrabold text-4xl sm:text-5xl md:text-6xl text-white mb-6 leading-tight drop-shadow-lg">
+                    Solusi <span class="text-primary">Konveksi</span> & <br>Custom Apparel
+                </h1>
+                <p class="text-lg sm:text-xl text-gray-200 mb-8 max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed">
+                    Wujudkan identitas tim dan brand Anda dengan kualitas produksi terbaik. Melayani pembuatan jersey, jaket, dan seragam dengan desain 100% custom.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href={whatsappUrl} target="_blank" class="bg-primary text-white px-8 py-4 rounded font-heading font-bold text-lg hover:bg-[#017a91] transition shadow-xl shadow-primary/20 flex items-center justify-center gap-2">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i>
+                        Konsultasi Gratis
+                    </a>
+                    <a href="#products" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded font-heading font-bold text-lg hover:bg-white hover:text-secondary transition flex items-center justify-center">
+                        Lihat Katalog
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Column: 3D Interactive Jersey -->
+            <div class="hidden lg:flex justify-center items-center perspective-1000">
+                <div class="tilt-card-container w-[500px] h-[600px] flex items-center justify-center relative cursor-pointer" id="tilt-zone">
+                    
+                    <!-- Background Glow (Static) -->
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-full blur-3xl animate-pulse -z-10"></div>
+
+                    <!-- 3D Card Wrapper -->
+                    <div class="tilt-card w-full h-full flex items-center justify-center idle-float" id="tilt-card">
+                        
+                        <!-- 1. Shadow (Base Layer) -->
+                        <div class="tilt-shadow"></div>
+
+                        <!-- 2. Main Jersey Image (Middle Layer) -->
+                        <div class="relative z-10 transform transition-transform duration-200" style="transform: translateZ(20px);">
+                            <img src="https://www.pngall.com/wp-content/uploads/5/Blue-T-Shirt-PNG-Clipart.png" 
+                                 alt="3D Jersey Mockup" 
+                                 class="w-[480px] drop-shadow-2xl object-contain filter brightness-110 contrast-110">
+                            
+                            <!-- Glare Overlay -->
+                            <div class="tilt-glare absolute inset-0 rounded-full opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
+                        </div>
+
+                        <!-- 3. Floating Badges (Top Layer - Pop out more) -->
+                        <div class="floating-element absolute top-40 right-10 bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-xl flex items-center gap-3 z-30" style="transform: translateZ(60px);">
+                            <div class="w-6 h-6 rounded-full bg-[#0197B2] border border-gray-200 shadow-inner"></div>
+                            <div>
+                                <span class="block text-xs font-bold text-secondary uppercase tracking-wider">Base Color</span>
+                                <span class="block text-[10px] text-gray-500">Alus Cyan</span>
+                            </div>
+                        </div>
+
+                        <div class="floating-element absolute bottom-40 left-0 bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-xl flex items-center gap-3 z-30" style="transform: translateZ(80px);">
+                            <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-primary shadow-sm">
+                                <i data-lucide="scissors" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="block text-xs font-bold text-secondary uppercase tracking-wider">Premium Fit</span>
+                                <span class="block text-[10px] text-gray-500">Raglan Cut</span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // 3D Tilt Effect
+    const tiltZone = document.getElementById('tilt-zone');
+    const tiltCard = document.getElementById('tilt-card');
+    
+    if (tiltZone && tiltCard) {
+        tiltZone.addEventListener('mousemove', (e) => {
+            const rect = tiltZone.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = ((y - centerY) / centerY) * -15;
+            const rotateY = ((x - centerX) / centerX) * 15;
+
+            tiltCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            
+            // Move floating badges slightly more (parallax)
+            document.querySelectorAll('.floating-element').forEach((el, index) => {
+                const factor = index === 0 ? 1.5 : 1.2;
+                (el as HTMLElement).style.transform = `translateZ(${60 + index*20}px) translateX(${(x - centerX) / (20/factor)}px) translateY(${(y - centerY) / (20/factor)}px)`;
+            });
+        });
+
+        tiltZone.addEventListener('mouseleave', () => {
+            tiltCard.style.transform = `rotateX(0) rotateY(0)`;
+        });
+    }
+</script>

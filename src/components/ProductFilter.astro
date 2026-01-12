@@ -1,0 +1,70 @@
+---
+interface Props {
+    categories: string[];
+    activeCategory?: string;
+}
+
+const { categories, activeCategory = "Semua" } = Astro.props;
+---
+
+<div class="sticky top-20 z-40 bg-white/95 backdrop-blur-sm shadow-sm py-4 mb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-wrap justify-center gap-3" id="product-filter">
+            {categories.map((category) => (
+                <button 
+                    class={`filter-btn px-6 py-2.5 rounded-full font-medium text-sm transition-all duration-300 ${
+                        category === activeCategory 
+                            ? 'bg-primary text-white shadow-lg shadow-primary/30' 
+                            : 'bg-accent text-secondary hover:bg-primary/10'
+                    }`}
+                    data-category={category}
+                >
+                    {category}
+                </button>
+            ))}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const productCards = document.querySelectorAll('[data-product-category]');
+        
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const category = btn.getAttribute('data-category');
+                
+                // Update active button
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-primary', 'text-white', 'shadow-lg', 'shadow-primary/30');
+                    b.classList.add('bg-accent', 'text-secondary');
+                });
+                btn.classList.remove('bg-accent', 'text-secondary');
+                btn.classList.add('bg-primary', 'text-white', 'shadow-lg', 'shadow-primary/30');
+                
+                // Filter products
+                productCards.forEach(card => {
+                    const cardCategory = card.getAttribute('data-product-category');
+                    if (category === 'Semua' || cardCategory === category) {
+                        (card as HTMLElement).style.display = 'block';
+                        card.classList.add('fade-in');
+                    } else {
+                        (card as HTMLElement).style.display = 'none';
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+<style>
+    .fade-in {
+        animation: fadeIn 0.4s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+</style>

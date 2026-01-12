@@ -1,0 +1,119 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ContentSplit from '../components/ContentSplit.astro';
+import ValuesGrid from '../components/ValuesGrid.astro';
+import CTA from '../components/CTA.astro';
+import Footer from '../components/Footer.astro';
+import FloatingWhatsApp from '../components/FloatingWhatsApp.astro';
+
+const values = [
+    {
+        icon: "target",
+        title: "Presisi Tinggi",
+        description: "Potongan pola yang akurat dan hasil printing yang tajam sesuai desain digital."
+    },
+    {
+        icon: "gem",
+        title: "Material Premium",
+        description: "Hanya menggunakan kain grade terbaik (Drifit, Cotton Combed, Fleece, dll) demi kenyamanan pengguna."
+    },
+    {
+        icon: "clock",
+        title: "Tepat Waktu",
+        description: "Manajemen produksi terstruktur menjamin pesanan selesai sesuai deadline yang disepakati."
+    }
+];
+
+const whatsappUrl = "https://wa.me/628112230558";
+---
+
+<Layout title="Tentang Kami - Alus Factory" description="Alus Factory hadir sebagai jawaban atas kebutuhan apparel custom berkualitas tinggi. Berbasis teknologi manufaktur modern dan tim kreatif berpengalaman.">
+    <Navbar />
+    
+    <PageHeader 
+        title="Tentang Kami" 
+        subtitle="Dedikasi pada Kualitas, Spesialis dalam Kustomisasi"
+        backgroundImage="https://images.unsplash.com/photo-1558171813-4c088753af8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+    />
+    
+    <!-- Intro Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-xl md:text-2xl text-gray-600 leading-relaxed font-light">
+                Alus Factory hadir sebagai jawaban atas kebutuhan apparel custom berkualitas tinggi. Berbasis teknologi manufaktur modern dan tim kreatif yang berpengalaman, kami mengubah ide Anda menjadi produk tekstil premium yang merepresentasikan identitas tim, brand, dan komunitas Anda.
+            </p>
+        </div>
+    </section>
+    
+    <!-- Story Section -->
+    <ContentSplit 
+        imageSrc="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+        imageAlt="Tim Alus Factory"
+        imagePosition="right"
+    >
+        <h4 class="text-primary font-heading font-bold tracking-wider uppercase mb-2">Siapa Kami</h4>
+        <h2 class="text-3xl md:text-4xl font-heading font-bold text-secondary mb-6 leading-tight">
+            Mitra Produksi Apparel <br class="hidden md:inline">Profesional Anda
+        </h2>
+        <p class="text-gray-600 mb-6 leading-relaxed">
+            Alus Factory adalah perusahaan konveksi modern yang berfokus pada produksi pakaian custom "end-to-end". Dari pemilihan bahan, proses desain, pola, hingga finishing, semua dikerjakan dengan standar quality control yang ketat.
+        </p>
+        <p class="text-gray-600 mb-8 leading-relaxed">
+            Kami bukan sekadar tukang jahit; kami adalah mitra produksi yang mengerti bahwa setiap detail pada pakaian Anda adalah cerminan citra profesional Anda.
+        </p>
+        
+        <!-- Stats -->
+        <div class="flex items-center gap-8 pt-4 border-t border-gray-100">
+            <div>
+                <span class="block text-3xl font-heading font-bold text-primary">500+</span>
+                <span class="text-sm text-gray-500">Klien Puas</span>
+            </div>
+            <div>
+                <span class="block text-3xl font-heading font-bold text-primary">5+</span>
+                <span class="text-sm text-gray-500">Tahun Pengalaman</span>
+            </div>
+            <div>
+                <span class="block text-3xl font-heading font-bold text-primary">10K+</span>
+                <span class="text-sm text-gray-500">Produk Selesai</span>
+            </div>
+        </div>
+    </ContentSplit>
+    
+    <!-- Values Section -->
+    <section class="py-16 bg-accent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h4 class="text-primary font-heading font-bold tracking-wider uppercase mb-2">Nilai Kami</h4>
+                <h2 class="text-3xl md:text-4xl font-heading font-bold text-secondary">Prinsip yang Kami Pegang</h2>
+            </div>
+        </div>
+    </section>
+    
+    <ValuesGrid values={values} />
+    
+    <!-- Workshop Visit CTA -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl md:text-3xl font-heading font-bold text-secondary mb-4">
+                Ingin Berkunjung ke Workshop Kami?
+            </h2>
+            <p class="text-gray-600 mb-8 max-w-2xl mx-auto">
+                Kami membuka kesempatan bagi Anda untuk melihat langsung proses produksi dan berdiskusi dengan tim kami.
+            </p>
+            <a 
+                href={whatsappUrl}
+                target="_blank"
+                class="inline-flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-full font-heading font-bold text-lg hover:bg-[#017a91] transition shadow-xl shadow-primary/20"
+            >
+                <i data-lucide="message-circle" class="w-5 h-5"></i>
+                Hubungi Tim Kami
+            </a>
+        </div>
+    </section>
+    
+    <CTA />
+    <Footer />
+    <FloatingWhatsApp />
+</Layout>

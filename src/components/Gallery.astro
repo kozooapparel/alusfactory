@@ -1,0 +1,38 @@
+---
+const galleryImages = [
+    "https://images.unsplash.com/photo-1517466787929-bc90951d0974?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1562157873-818bc0726f68?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1544441893-675973e31985?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1556906781-9a412961c28c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+];
+---
+
+<section id="gallery" class="py-20 bg-accent">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-heading font-bold text-secondary mb-10 text-center">Galeri Produksi</h2>
+        
+        <div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6" id="gallery-grid">
+            {galleryImages.map((image, index) => (
+                <div class="gallery-item break-inside-avoid rounded-lg overflow-hidden shadow-md relative" style={`animation-delay: ${index * 0.2}s`}>
+                    <img src={image} alt={`Gallery ${index + 1}`} class="w-full hover:scale-105 transition duration-500">
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<script>
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.3 };
+    
+    const galleryObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.target.classList.contains('gallery-item')) {
+                entry.target.classList.add('gallery-active');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.gallery-item').forEach(item => galleryObserver.observe(item));
+</script>

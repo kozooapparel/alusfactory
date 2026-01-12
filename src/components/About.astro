@@ -1,0 +1,89 @@
+---
+---
+
+<section id="about" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <!-- Image Grid -->
+            <div class="grid grid-cols-2 gap-4">
+                <img src="https://images.unsplash.com/photo-1574634534894-89d7576c8259?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Proses Produksi" class="rounded-lg shadow-lg w-full h-64 object-cover transform translate-y-8">
+                <img src="https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Detail Bahan" class="rounded-lg shadow-lg w-full h-64 object-cover">
+            </div>
+            
+            <!-- Content with Screen Print Animation -->
+            <div id="about-content">
+                <h4 class="text-primary font-heading font-bold tracking-wider uppercase mb-2">Tentang Alus Factory</h4>
+                
+                <div class="mb-6">
+                    <!-- Screen Print Reveal Effect -->
+                    <h2 class="text-3xl md:text-4xl font-heading font-bold text-secondary leading-tight reveal-holder">
+                        <span class="reveal-content">Mitra Produksi Apparel</span>
+                        <div class="reveal-block"></div>
+                    </h2>
+                    <h2 class="text-3xl md:text-4xl font-heading font-bold text-secondary leading-tight reveal-holder">
+                        <span class="reveal-content">Profesional Anda</span>
+                        <div class="reveal-block" style="background-color: #1F2937;"></div>
+                    </h2>
+                </div>
+
+                <p class="text-gray-600 mb-6 leading-relaxed mt-2">
+                    Alus Factory hadir sebagai solusi manufaktur pakaian yang mengutamakan ketepatan waktu dan kualitas detail. Berpengalaman menangani ribuan pesanan dari komunitas kecil hingga korporat besar.
+                </p>
+                <p class="text-gray-600 mb-8 leading-relaxed">
+                    Fasilitas produksi kami dilengkapi dengan teknologi printing sublimasi terkini dan tenaga jahit ahli, memastikan setiap potong pakaian mencerminkan standar tinggi brand Anda.
+                </p>
+                
+                <div class="flex items-center gap-8" id="stats-container">
+                    <div>
+                        <span class="block text-3xl font-heading font-bold text-primary stat-number" data-target="500">0</span>
+                        <span class="text-sm text-gray-500">Klien Puas</span>
+                    </div>
+                    <div>
+                        <span class="block text-3xl font-heading font-bold text-primary stat-number" data-target="100">0</span>
+                        <span class="text-sm text-gray-500">Jaminan Kualitas (%)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Animation for stat counters
+    function animateValue(obj: HTMLElement, start: number, end: number, duration: number) {
+        let startTimestamp: number | null = null;
+        const step = (timestamp: number) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            let val = Math.floor(progress * (end - start) + start);
+            if (end === 500) obj.innerHTML = val + "+";
+            else if (end === 100) obj.innerHTML = val + "%";
+            else obj.innerHTML = String(val);
+            if (progress < 1) window.requestAnimationFrame(step);
+        };
+        window.requestAnimationFrame(step);
+    }
+
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.3 };
+    
+    const aboutObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (entry.target.id === 'about-content') {
+                    const reveals = entry.target.querySelectorAll('.reveal-holder');
+                    reveals.forEach((el, index) => 
+                        setTimeout(() => el.classList.add('reveal-active'), index * 200)
+                    );
+                    const stats = entry.target.querySelectorAll('.stat-number');
+                    stats.forEach(stat => 
+                        animateValue(stat as HTMLElement, 0, parseInt(stat.getAttribute('data-target') || '0'), 2000)
+                    );
+                }
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    const aboutContent = document.getElementById('about-content');
+    if (aboutContent) aboutObserver.observe(aboutContent);
+</script>
