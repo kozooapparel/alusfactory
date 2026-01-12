@@ -42,31 +42,41 @@ const navLinks = [
 
             <!-- Mobile Menu Button -->
             <div class="md:hidden flex items-center">
-                <button id="mobile-menu-btn" class="text-secondary hover:text-primary focus:outline-none">
-                    <i data-lucide="menu" class="w-8 h-8"></i>
+                <button id="mobile-menu-btn" class="text-secondary hover:text-primary focus:outline-none p-2" aria-label="Toggle menu">
+                    <svg id="menu-icon-open" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                    <svg id="menu-icon-close" class="w-8 h-8 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
                 </button>
             </div>
         </div>
     </div>
 
     <!-- Mobile Menu Panel -->
-    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full">
-        <div class="px-4 pt-2 pb-6 space-y-2 shadow-lg">
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-20 shadow-xl">
+        <div class="px-4 pt-4 pb-6 space-y-2">
             {navLinks.map(link => (
                 <a 
                     href={link.href} 
-                    class={`block px-3 py-3 rounded-md text-base font-medium ${
+                    class={`flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium transition-colors ${
                         currentPath === link.href 
-                            ? 'bg-primary/10 text-primary' 
+                            ? 'bg-primary text-white' 
                             : 'text-secondary hover:bg-accent hover:text-primary'
                     }`}
                 >
                     {link.label}
                 </a>
             ))}
-            <a href={whatsappUrl} target="_blank" class="block mt-4 text-center w-full bg-primary text-white px-5 py-3 rounded font-heading font-bold">
-                Hubungi Kami
-            </a>
+            <div class="pt-4 border-t border-gray-100 mt-4">
+                <a href={whatsappUrl} target="_blank" class="flex items-center justify-center gap-2 w-full bg-primary text-white px-5 py-4 rounded-lg font-heading font-bold text-lg">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12.04 2C6.48 2 2 6.48 2 12.04C2 13.82 2.47 15.52 3.33 17L2.07 22L7.22 20.65C8.64 21.43 10.31 21.89 12.04 21.89C17.6 21.89 22.08 17.41 22.08 11.85C22.08 6.4 17.6 2 12.04 2Z"/>
+                    </svg>
+                    Hubungi Kami
+                </a>
+            </div>
         </div>
     </div>
 </nav>
@@ -82,8 +92,21 @@ const navLinks = [
     // Mobile menu toggle
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-    mobileBtn?.addEventListener('click', () => mobileMenu?.classList.toggle('hidden'));
+    const menuIconOpen = document.getElementById('menu-icon-open');
+    const menuIconClose = document.getElementById('menu-icon-close');
+    
+    mobileBtn?.addEventListener('click', () => {
+        const isHidden = mobileMenu?.classList.contains('hidden');
+        mobileMenu?.classList.toggle('hidden');
+        menuIconOpen?.classList.toggle('hidden');
+        menuIconClose?.classList.toggle('hidden');
+    });
+    
     document.querySelectorAll('#mobile-menu a').forEach(link => 
-        link.addEventListener('click', () => mobileMenu?.classList.add('hidden'))
+        link.addEventListener('click', () => {
+            mobileMenu?.classList.add('hidden');
+            menuIconOpen?.classList.remove('hidden');
+            menuIconClose?.classList.add('hidden');
+        })
     );
 </script>

@@ -1,52 +1,132 @@
 ---
 const whatsappUrl = "https://wa.me/628112230558";
+
+const menuLinks = [
+    { href: "/", label: "Home", icon: "home" },
+    { href: "/tentang", label: "Tentang Kami", icon: "users" },
+    { href: "/produk", label: "Produk", icon: "shirt" },
+    { href: "/galeri", label: "Galeri", icon: "images" },
+];
+
+const layanan = [
+    { label: "Jersey Custom", icon: "trophy" },
+    { label: "Polo Shirt", icon: "user-check" },
+    { label: "Jaket & Hoodie", icon: "wind" },
+    { label: "T-Shirt Merch", icon: "tag" },
+];
 ---
 
 <footer class="bg-secondary text-white pt-16 pb-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            <div class="col-span-1 md:col-span-1">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+            <!-- Brand Column -->
+            <div class="col-span-1">
                 <!-- Footer Logo -->
                 <div class="flex items-center gap-2 mb-4">
                     <img src="https://placehold.co/150x50/ffffff/0197B2?text=LOGO+ANDA" alt="Alus Factory Logo" class="h-8 w-auto object-contain">
                     <span class="font-heading font-bold text-2xl">ALUS<span class="text-primary">FACTORY</span></span>
                 </div>
                 
-                <p class="text-gray-400 text-sm leading-relaxed mb-4">Solusi manufaktur apparel terpercaya untuk segala kebutuhan branding dan komunitas Anda.</p>
-                <div class="flex space-x-4">
-                    <a href="#" class="text-gray-400 hover:text-primary transition"><i data-lucide="instagram" class="w-5 h-5"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-primary transition"><i data-lucide="facebook" class="w-5 h-5"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-primary transition"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">Solusi manufaktur apparel terpercaya untuk segala kebutuhan branding dan komunitas Anda.</p>
+                
+                <!-- Social Media with Icons -->
+                <div class="flex space-x-3">
+                    <a href="#" class="w-10 h-10 bg-gray-700 hover:bg-primary rounded-full flex items-center justify-center transition-colors" aria-label="Instagram">
+                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-gray-700 hover:bg-primary rounded-full flex items-center justify-center transition-colors" aria-label="Facebook">
+                        <i data-lucide="facebook" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-gray-700 hover:bg-[#1DA1F2] rounded-full flex items-center justify-center transition-colors" aria-label="Twitter">
+                        <i data-lucide="twitter" class="w-5 h-5"></i>
+                    </a>
+                    <a href={whatsappUrl} target="_blank" class="w-10 h-10 bg-gray-700 hover:bg-[#25D366] rounded-full flex items-center justify-center transition-colors" aria-label="WhatsApp">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    </a>
                 </div>
             </div>
+
+            <!-- Menu Column with Icons -->
             <div>
-                <h4 class="font-heading font-bold text-lg mb-4">Menu</h4>
-                <ul class="space-y-2 text-gray-400 text-sm">
-                    <li><a href="/" class="hover:text-primary transition">Home</a></li>
-                    <li><a href="/tentang" class="hover:text-primary transition">Tentang Kami</a></li>
-                    <li><a href="/produk" class="hover:text-primary transition">Produk</a></li>
-                    <li><a href="/galeri" class="hover:text-primary transition">Galeri</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-heading font-bold text-lg mb-4">Kontak</h4>
+                <h4 class="font-heading font-bold text-lg mb-4 flex items-center gap-2">
+                    <i data-lucide="menu" class="w-5 h-5 text-primary"></i>
+                    Menu
+                </h4>
                 <ul class="space-y-3 text-gray-400 text-sm">
-                    <li class="flex items-start gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-primary flex-shrink-0"></i><span>Jl. Industri No. 123, Bandung, Jawa Barat, Indonesia</span></li>
-                    <li class="flex items-center gap-3"><i data-lucide="phone" class="w-5 h-5 text-primary flex-shrink-0"></i><span>+62 811-2230-558</span></li>
-                    <li class="flex items-center gap-3"><i data-lucide="mail" class="w-5 h-5 text-primary flex-shrink-0"></i><span>hello@alusfactory.com</span></li>
+                    {menuLinks.map(link => (
+                        <li>
+                            <a href={link.href} class="hover:text-primary transition flex items-center gap-2">
+                                <i data-lucide={link.icon} class="w-4 h-4"></i>
+                                {link.label}
+                            </a>
+                        </li>
+                    ))}
                 </ul>
             </div>
-             <div>
-                <h4 class="font-heading font-bold text-lg mb-4">Jam Operasional</h4>
-                <ul class="space-y-2 text-gray-400 text-sm">
-                    <li class="flex justify-between"><span>Senin - Jumat</span> <span>08:00 - 17:00</span></li>
-                    <li class="flex justify-between"><span>Sabtu</span> <span>09:00 - 14:00</span></li>
-                    <li class="flex justify-between"><span>Minggu</span> <span class="text-red-400">Tutup</span></li>
+
+            <!-- Layanan Column with Icons -->
+            <div>
+                <h4 class="font-heading font-bold text-lg mb-4 flex items-center gap-2">
+                    <i data-lucide="package" class="w-5 h-5 text-primary"></i>
+                    Layanan
+                </h4>
+                <ul class="space-y-3 text-gray-400 text-sm">
+                    {layanan.map(item => (
+                        <li class="flex items-center gap-2">
+                            <i data-lucide={item.icon} class="w-4 h-4 text-primary/70"></i>
+                            {item.label}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            <!-- Kontak Column with Icons -->
+            <div>
+                <h4 class="font-heading font-bold text-lg mb-4 flex items-center gap-2">
+                    <i data-lucide="contact" class="w-5 h-5 text-primary"></i>
+                    Kontak
+                </h4>
+                <ul class="space-y-4 text-gray-400 text-sm">
+                    <li class="flex items-start gap-3">
+                        <div class="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-primary"></i>
+                        </div>
+                        <span>Jl. Industri No. 123, Bandung, Jawa Barat, Indonesia</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="phone" class="w-4 h-4 text-primary"></i>
+                        </div>
+                        <span>+62 811-2230-558</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="mail" class="w-4 h-4 text-primary"></i>
+                        </div>
+                        <span>hello@alusfactory.com</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="clock" class="w-4 h-4 text-primary"></i>
+                        </div>
+                        <div>
+                            <span class="block">Senin - Jumat: 08:00 - 17:00</span>
+                            <span class="block text-xs text-gray-500">Sabtu: 09:00 - 14:00</span>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
-        <div class="border-t border-gray-700 pt-8 text-center">
-            <p class="text-gray-500 text-sm">&copy; 2024 Alus Factory. All rights reserved.</p>
+
+        <!-- Bottom Bar -->
+        <div class="border-t border-gray-700 pt-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2024 Alus Factory. All rights reserved.</p>
+                <div class="flex items-center gap-6 text-sm text-gray-500">
+                    <a href="#" class="hover:text-primary transition">Kebijakan Privasi</a>
+                    <a href="#" class="hover:text-primary transition">Syarat & Ketentuan</a>
+                </div>
+            </div>
         </div>
     </div>
 </footer>

@@ -34,8 +34,15 @@ const { title, description = "Wujudkan identitas tim dan brand Anda dengan kuali
     <slot />
     
     <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
+        // Initialize Lucide icons after DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+        
+        // Also run immediately in case DOM is already loaded
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            lucide.createIcons();
+        }
     </script>
 </body>
 </html>
