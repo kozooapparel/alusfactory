@@ -1,0 +1,15 @@
+{
+    "id": "jaket-hoodie",
+    "title": "Jaket Hoodie",
+    "description": "Outerwear premium untuk identitas komunitas dengan bahan fleece nyaman.",
+    "image": "51_kixbrk",
+    "category": "Jaket",
+    "specs": [
+        "Bahan Fleece Premium",
+        "Full Print atau kombinasi",
+        "Resleting YKK"
+    ],
+    "badge": "New",
+    "featured": true,
+    "order": 6
+}

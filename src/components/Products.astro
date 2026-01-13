@@ -1,28 +1,15 @@
 ---
-import { cloudinaryUrl, JERSEY_IMAGES, KAOS_IMAGES, JAKET_IMAGES } from '../lib/cloudinary';
+import { cloudinaryUrl } from '../lib/cloudinary';
+import { getFeaturedProducts } from '../lib/content';
 
-const products = [
-    {
-        title: "Jersey Custom",
-        description: "Cocok untuk tim esports, futsal, dan sepak bola.",
-        image: cloudinaryUrl(JERSEY_IMAGES[0], { width: 600, height: 600 })
-    },
-    {
-        title: "Polo Shirt",
-        description: "Elegan untuk seragam kantor dan acara semi-formal.",
-        image: cloudinaryUrl(KAOS_IMAGES[0], { width: 600, height: 600 })
-    },
-    {
-        title: "Jaket & Hoodie",
-        description: "Bahan nyaman untuk komunitas dan angkatan.",
-        image: cloudinaryUrl(JAKET_IMAGES[0], { width: 600, height: 600 })
-    },
-    {
-        title: "T-Shirt Merch",
-        description: "Sablon berkualitas tinggi untuk merchandise brand.",
-        image: cloudinaryUrl(KAOS_IMAGES[1], { width: 600, height: 600 })
-    }
-];
+// Get featured products for homepage
+const rawProducts = getFeaturedProducts();
+
+const products = rawProducts.map(product => ({
+    title: product.title,
+    description: product.description,
+    image: cloudinaryUrl(product.image, { width: 600, height: 600 })
+}));
 ---
 
 <section id="products" class="py-20 bg-accent">

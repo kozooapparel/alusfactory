@@ -1,8 +1,12 @@
 ---
-import { cloudinaryUrl, GALLERY_IMAGES } from '../lib/cloudinary';
+import { cloudinaryUrl } from '../lib/cloudinary';
+import { getFeaturedGallery } from '../lib/content';
 
-const galleryImages = GALLERY_IMAGES.slice(0, 5).map(img => ({
-    src: cloudinaryUrl(img.path, { width: 600, quality: 'auto' }),
+// Get featured gallery items for homepage
+const rawGallery = getFeaturedGallery();
+
+const galleryImages = rawGallery.map(img => ({
+    src: cloudinaryUrl(img.image, { width: 600, quality: 'auto' }),
     alt: img.caption
 }));
 ---

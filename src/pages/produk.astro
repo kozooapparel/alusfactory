@@ -7,71 +7,23 @@ import ProductCard from '../components/ProductCard.astro';
 import CTA from '../components/CTA.astro';
 import Footer from '../components/Footer.astro';
 import FloatingWhatsApp from '../components/FloatingWhatsApp.astro';
-import { cloudinaryUrl, JERSEY_IMAGES, KAOS_IMAGES, JAKET_IMAGES, HEADER_BG } from '../lib/cloudinary';
+import { cloudinaryUrl, HEADER_BG } from '../lib/cloudinary';
+import { getProducts } from '../lib/content';
 
 const categories = ["Semua", "Jersey", "Casual", "Jaket"];
 
-const products = [
-    {
-        title: "Jersey Custom (Performance)",
-        description: "Cocok untuk futsal, sepakbola, dan e-sport. Desain full custom sesuai identitas tim Anda.",
-        image: cloudinaryUrl(JERSEY_IMAGES[0], { width: 600, height: 600 }),
-        category: "Jersey",
-        specs: ["Bahan Drifit Milano/Benzema", "Full Printing Sublimation", "Anti-UV & Quick Dry"],
-        badge: "Best Seller"
-    },
-    {
-        title: "Jersey Basket",
-        description: "Pola potong longgar standar NBA/IBL untuk pergerakan maksimal di lapangan.",
-        image: cloudinaryUrl(JERSEY_IMAGES[1], { width: 600, height: 600 }),
-        category: "Jersey",
-        specs: ["Bahan Mesh Breathable", "Leher V-Neck/Round", "Aplikasi Bordir atau Printing"]
-    },
-    {
-        title: "Jersey Esports",
-        description: "Desain gaming premium dengan full sublimation print.",
-        image: cloudinaryUrl(JERSEY_IMAGES[2], { width: 600, height: 600 }),
-        category: "Jersey",
-        specs: ["Full Sublimation Print", "Bahan Drifit Premium", "Custom Name & Number"]
-    },
-    {
-        title: "Polo T-Shirt",
-        description: "Elegan untuk seragam kantor atau event semi-formal dengan kesan profesional.",
-        image: cloudinaryUrl(KAOS_IMAGES[0], { width: 600, height: 600 }),
-        category: "Casual",
-        specs: ["Bahan Lacoste Cotton/CVC", "Kerah kokoh", "Opsi Bordir Komputer presisi"],
-        badge: "Popular"
-    },
-    {
-        title: "T-Shirt / Kaos",
-        description: "Merchandise event, kaos komunitas, atau clothing brand dengan berbagai teknik sablon.",
-        image: cloudinaryUrl(KAOS_IMAGES[1], { width: 600, height: 600 }),
-        category: "Casual",
-        specs: ["Cotton Combed 24s/30s (Reactive)", "Sablon Plastisol/DTF/Discharge", "Ukuran S - 4XL"]
-    },
-    {
-        title: "Jaket Hoodie",
-        description: "Outerwear premium untuk identitas komunitas dengan bahan fleece nyaman.",
-        image: cloudinaryUrl(JAKET_IMAGES[0], { width: 600, height: 600 }),
-        category: "Jaket",
-        specs: ["Bahan Fleece Premium", "Full Print atau kombinasi", "Resleting YKK"],
-        badge: "New"
-    },
-    {
-        title: "Jaket Windbreaker",
-        description: "Jaket tipis anti angin cocok untuk event outdoor dan komunitas.",
-        image: cloudinaryUrl(JAKET_IMAGES[1], { width: 600, height: 600 }),
-        category: "Jaket",
-        specs: ["Bahan Taslan/Parasut", "Water Resistant", "Ringan & Nyaman"]
-    },
-    {
-        title: "Baju Baseball",
-        description: "Gaya klasik sportwear Amerika yang timeless dan nyaman digunakan sehari-hari.",
-        image: cloudinaryUrl(KAOS_IMAGES[2], { width: 600, height: 600 }),
-        category: "Casual",
-        specs: ["Bahan Paragon/Soft Dry", "Kancing depan (Button up)", "Potongan Relaxed Fit"]
-    }
-];
+// Load products from content files
+const rawProducts = getProducts();
+
+// Transform to include cloudinary URLs
+const products = rawProducts.map(product => ({
+    title: product.title,
+    description: product.description,
+    image: cloudinaryUrl(product.image, { width: 600, height: 600 }),
+    category: product.category,
+    specs: product.specs,
+    badge: product.badge || undefined
+}));
 
 const whatsappCustomUrl = "https://wa.me/628112230558?text=Halo,%20saya%20ingin%20konsultasi%20custom%20request";
 const headerBg = cloudinaryUrl(HEADER_BG.produk, { width: 1920, height: 600, crop: 'fill' });

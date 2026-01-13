@@ -1,0 +1,161 @@
+# Decap CMS Configuration for Alus Factory
+# Documentation: https://decapcms.org/docs/
+
+# Site URL
+site_url: https://alusfactory.com
+
+backend:
+  name: github
+  repo: YOUR_USERNAME/alusfactory  # TODO: Ganti dengan repo GitHub Anda
+  branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+# Logo di panel admin
+logo_url: /logo.png
+
+# Cloudinary untuk upload gambar
+media_library:
+  name: cloudinary
+  config:
+    cloud_name: dxfxcwtvt
+    api_key: YOUR_CLOUDINARY_API_KEY  # TODO: Ganti dengan API key Cloudinary
+
+# Pengaturan media di lokal (fallback)
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+# Bahasa Indonesia
+locale: "id"
+
+# Collections (konten yang bisa diedit)
+collections:
+  # ========================================
+  # PRODUK
+  # ========================================
+  - name: "products"
+    label: "Produk"
+    label_singular: "Produk"
+    description: "Kelola daftar produk yang ditampilkan di website"
+    folder: "src/content/products"
+    create: true
+    slug: "{{slug}}"
+    format: "json"
+    fields:
+      - label: "ID"
+        name: "id"
+        widget: "string"
+        hint: "ID unik produk (huruf kecil, tanpa spasi, contoh: jersey-custom)"
+      - label: "Nama Produk"
+        name: "title"
+        widget: "string"
+      - label: "Deskripsi"
+        name: "description"
+        widget: "text"
+      - label: "Gambar"
+        name: "image"
+        widget: "image"
+        hint: "Upload atau pilih gambar dari Cloudinary"
+      - label: "Kategori"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Jersey", value: "Jersey" }
+          - { label: "Casual", value: "Casual" }
+          - { label: "Jaket", value: "Jaket" }
+      - label: "Spesifikasi"
+        name: "specs"
+        widget: "list"
+        hint: "Daftar spesifikasi produk"
+        field:
+          widget: "string"
+      - label: "Badge"
+        name: "badge"
+        widget: "select"
+        required: false
+        options:
+          - { label: "Best Seller", value: "Best Seller" }
+          - { label: "New", value: "New" }
+          - { label: "Popular", value: "Popular" }
+      - label: "Tampilkan di Homepage"
+        name: "featured"
+        widget: "boolean"
+        default: false
+      - label: "Urutan"
+        name: "order"
+        widget: "number"
+        default: 0
+        hint: "Urutan tampil (angka kecil = tampil duluan)"
+
+  # ========================================
+  # GALLERY
+  # ========================================
+  - name: "gallery"
+    label: "Gallery"
+    label_singular: "Gambar Gallery"
+    description: "Kelola gambar di halaman galeri"
+    folder: "src/content/gallery"
+    create: true
+    slug: "{{slug}}"
+    format: "json"
+    fields:
+      - label: "Judul"
+        name: "title"
+        widget: "string"
+      - label: "Gambar"
+        name: "image"
+        widget: "image"
+      - label: "Caption"
+        name: "caption"
+        widget: "string"
+        hint: "Deskripsi singkat gambar"
+      - label: "Kategori"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Tim Olahraga", value: "Tim Olahraga" }
+          - { label: "Komunitas", value: "Komunitas" }
+          - { label: "Perusahaan/Korporat", value: "Perusahaan/Korporat" }
+          - { label: "Event", value: "Event" }
+      - label: "Tampilkan di Homepage"
+        name: "featured"
+        widget: "boolean"
+        default: false
+      - label: "Urutan"
+        name: "order"
+        widget: "number"
+        default: 0
+
+  # ========================================
+  # PENGATURAN WEBSITE
+  # ========================================
+  - name: "settings"
+    label: "Pengaturan"
+    files:
+      - name: "site"
+        label: "Pengaturan Website"
+        file: "src/content/settings/site.json"
+        fields:
+          - label: "Nama Website"
+            name: "siteName"
+            widget: "string"
+            default: "Alus Factory"
+          - label: "Tagline"
+            name: "tagline"
+            widget: "string"
+          - label: "WhatsApp Number"
+            name: "whatsapp"
+            widget: "string"
+            hint: "Format: 628xxxxxxxxxx (tanpa + atau spasi)"
+          - label: "Email"
+            name: "email"
+            widget: "string"
+          - label: "Alamat"
+            name: "address"
+            widget: "text"
+          - label: "Hero Background"
+            name: "heroBg"
+            widget: "image"
+          - label: "Hero Product Image"
+            name: "heroProduct"
+            widget: "image"

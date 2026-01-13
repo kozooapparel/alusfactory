@@ -5,13 +5,17 @@ import PageHeader from '../components/PageHeader.astro';
 import GalleryGrid from '../components/GalleryGrid.astro';
 import Footer from '../components/Footer.astro';
 import FloatingWhatsApp from '../components/FloatingWhatsApp.astro';
-import { cloudinaryUrl, GALLERY_IMAGES, HEADER_BG } from '../lib/cloudinary';
+import { cloudinaryUrl, HEADER_BG } from '../lib/cloudinary';
+import { getGallery } from '../lib/content';
 
 const whatsappUrl = "https://wa.me/628112230558?text=Halo,%20saya%20ingin%20mengirimkan%20desain%20saya";
 const headerBg = cloudinaryUrl(HEADER_BG.galeri, { width: 1920, height: 600, crop: 'fill' });
 
-const galleryImages = GALLERY_IMAGES.map(img => ({
-    src: cloudinaryUrl(img.path, { width: 800, quality: 'auto' }),
+// Get gallery from content files
+const rawGallery = getGallery();
+
+const galleryImages = rawGallery.map(img => ({
+    src: cloudinaryUrl(img.image, { width: 800, quality: 'auto' }),
     alt: img.caption,
     caption: img.caption,
     category: img.category
