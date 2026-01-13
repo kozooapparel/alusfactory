@@ -29,6 +29,17 @@
         }
       });
     }
+
+    // Explicitly set config file path
+    window.CMS_MANUAL_INIT = true;
+
+    // Initialize CMS with explicit config path
+    CMS.init({
+      config: {
+        load_config_file: true,
+        local_backend: false
+      }
+    });
   </script>
 </body>
 
