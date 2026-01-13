@@ -68,6 +68,7 @@ collections:
         widget: "list"
         hint: "Daftar spesifikasi produk"
         field:
+          name: "spec"
           widget: "string"
       - label: "Badge"
         name: "badge"
