@@ -6,20 +6,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex" />
   <title>Admin Panel - Alus Factory</title>
-  <!-- Netlify Identity Widget for authentication -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  <!-- Netlify Identity - only load in production -->
+  <script>
+    if (window.location.hostname !== 'localhost') {
+      var script = document.createElement('script');
+      script.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js';
+      document.head.appendChild(script);
     }
-  </style>
+  </script>
 </head>
 
 <body>
-  <!-- Include the Decap CMS script -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
-    // Initialize Netlify Identity
+    // Netlify Identity (only in production)
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on("init", user => {
         if (!user) {
@@ -30,14 +30,56 @@
       });
     }
 
-    // Explicitly set config file path
-    window.CMS_MANUAL_INIT = true;
-
-    // Initialize CMS with explicit config path
+    // CMS Configuration
     CMS.init({
       config: {
-        load_config_file: true,
-        local_backend: false
+        load_config_file: false,
+        backend: {
+          name: 'github',
+          repo: 'kozooapparel/alusfactory',
+          branch: 'main',
+          base_url: 'https://api.netlify.com',
+          auth_endpoint: 'auth'
+        },
+        logo_url: '/logo.png',
+        media_folder: 'public/uploads',
+        public_folder: '/uploads',
+        locale: 'id',
+        collections: [
+          {
+            name: 'products',
+            label: 'Produk',
+            folder: 'src/content/products',
+            create: true,
+            format: 'json',
+            fields: [
+              { name: 'id', label: 'ID', widget: 'string' },
+              { name: 'title', label: 'Nama Produk', widget: 'string' },
+              { name: 'description', label: 'Deskripsi', widget: 'text' },
+              { name: 'image', label: 'Gambar (nama file Cloudinary)', widget: 'string', hint: 'Contoh: 86_efklrp' },
+              { name: 'category', label: 'Kategori', widget: 'select', options: ['Jersey', 'Casual', 'Jaket'] },
+              { name: 'specs', label: 'Spesifikasi', widget: 'list', field: { name: 'spec', widget: 'string' } },
+              { name: 'badge', label: 'Badge', widget: 'select', required: false, options: ['Best Seller', 'New', 'Popular'] },
+              { name: 'featured', label: 'Tampilkan di Homepage', widget: 'boolean', default: false },
+              { name: 'order', label: 'Urutan', widget: 'number', default: 0 }
+            ]
+          },
+          {
+            name: 'gallery',
+            label: 'Gallery',
+            folder: 'src/content/gallery',
+            create: true,
+            format: 'json',
+            fields: [
+              { name: 'title', label: 'Judul', widget: 'string' },
+              { name: 'image', label: 'Gambar (nama file Cloudinary)', widget: 'string' },
+              { name: 'caption', label: 'Caption', widget: 'string' },
+              { name: 'category', label: 'Kategori', widget: 'select', options: ['Tim Olahraga', 'Komunitas', 'Perusahaan/Korporat', 'Event'] },
+              { name: 'featured', label: 'Tampilkan di Homepage', widget: 'boolean', default: false },
+              { name: 'order', label: 'Urutan', widget: 'number', default: 0 }
+            ]
+          }
+        ]
       }
     });
   </script>
