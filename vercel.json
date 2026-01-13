@@ -1,22 +1,4 @@
 {
-    "headers": [
-        {
-            "source": "/admin/(.*)",
-            "headers": [
-                {
-                    "key": "Content-Type",
-                    "value": "text/yaml"
-                }
-            ]
-        },
-        {
-            "source": "/admin/config.yml",
-            "headers": [
-                {
-                    "key": "Content-Type",
-                    "value": "text/yaml; charset=utf-8"
-                }
-            ]
-        }
-    ]
+    "cleanUrls": true,
+    "trailingSlash": false
 }
