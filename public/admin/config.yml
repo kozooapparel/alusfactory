@@ -14,14 +14,7 @@ backend:
 # Logo di panel admin
 logo_url: /logo.png
 
-# Cloudinary untuk upload gambar
-media_library:
-  name: cloudinary
-  config:
-    cloud_name: dxfxcwtvt
-    api_key: YOUR_CLOUDINARY_API_KEY  # TODO: Ganti dengan API key Cloudinary
-
-# Pengaturan media di lokal (fallback)
+# Media folder (untuk upload gambar)
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
