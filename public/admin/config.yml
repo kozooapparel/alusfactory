@@ -6,7 +6,7 @@ site_url: https://alusfactory.com
 
 backend:
   name: github
-  repo: YOUR_USERNAME/alusfactory  # TODO: Ganti dengan repo GitHub Anda
+  repo: kozooapparel/alusfactory
   branch: main
   base_url: https://api.netlify.com
   auth_endpoint: auth
